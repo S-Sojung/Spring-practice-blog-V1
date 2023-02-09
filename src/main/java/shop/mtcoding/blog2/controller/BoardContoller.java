@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import shop.mtcoding.blog2.dto.ResponseDto;
 import shop.mtcoding.blog2.dto.board.BaordReq.BoardSaveReqDto;
 import shop.mtcoding.blog2.handler.ex.CustomApiException;
+import shop.mtcoding.blog2.model.BoardRepository;
 import shop.mtcoding.blog2.model.User;
 import shop.mtcoding.blog2.service.BoardService;
 
@@ -25,9 +27,13 @@ public class BoardContoller {
     HttpSession session;
     @Autowired
     BoardService boardService;
+    @Autowired
+    BoardRepository boardRepository;
 
     @GetMapping({ "/", "/board" })
-    public String board() {
+    public String main(Model model) {
+
+        model.addAttribute("dtos", boardRepository.findAllWithUser());
         return "board/main";
     }
 

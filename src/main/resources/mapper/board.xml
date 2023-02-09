@@ -11,7 +11,12 @@
     <select id="findById" resultType="shop.mtcoding.blog2.model.Board">
         select * from board_tb where id = #{id}
     </select>   
-
+    <select id="findAllWithUser" resultType="shop.mtcoding.blog2.dto.board.BoardResp$BoardMainRespDto">
+        Select bt.id, bt.title, ut.username
+        from board_tb bt
+        inner join user_tb ut
+        on bt.user_id = ut.id
+    </select>  
     <insert id="insert" >
         insert into board_tb( title, content, user_id, created_at) values(#{title},#{content},#{userId},now())
     </insert>    
