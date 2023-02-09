@@ -114,7 +114,7 @@ public class BoardControllerTest {
 
         // when
         ResultActions resultActions = mvc.perform(
-                delete("/board/" + id).session(mockSession)); // session이 주입된 채로 요청
+                delete("/board/" + id).session(mockSession));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.print("테스트: " + responseBody);
 
