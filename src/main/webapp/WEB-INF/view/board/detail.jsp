@@ -57,5 +57,24 @@
                 </ul>
             </div>
         </div>
+        <script>
+            function deleteById(id) {
+                //이 안에서 el 표현식으로 하면 안됨. script파일을 따로 빼는 순간 문제가 생김
+                //아작스 요청은 전부 DTO 로 응답, customApiExcetion 으로 
+                $.ajax({
+                    type: "delete",
+                    url: "/board/" + id,
+                    dataType: "json"
+                })
+                    .done(res => { //20X 일때
+                        alert(res.msg);
+                        location.href = "/";
+                    })
+                    .fail(err => { //40X , 50X 일때
+                        // console.log(err.responseJSON);
+                        alert(err.responseJSON.msg);
 
+                    });
+            }
+        </script>
         <%@ include file="../layout/footer.jsp" %>

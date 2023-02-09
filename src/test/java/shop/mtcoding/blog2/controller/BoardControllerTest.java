@@ -1,6 +1,7 @@
 package shop.mtcoding.blog2.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -106,4 +107,19 @@ public class BoardControllerTest {
         assertThat(dto.getUserId()).isEqualTo(2);
     }
 
+    @Test
+    public void delete_test() throws Exception {
+        // given
+        int id = 1;
+
+        // when
+        ResultActions resultActions = mvc.perform(
+                delete("/board/" + id).session(mockSession)); // session이 주입된 채로 요청
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.print("테스트: " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.msg").value("삭제성공"));
+        resultActions.andExpect(status().isOk());
+    }
 }
