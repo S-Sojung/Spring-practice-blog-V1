@@ -10,6 +10,7 @@ import shop.mtcoding.blog2.dto.board.BaordReq.BoardUpdateReqDto;
 import shop.mtcoding.blog2.handler.ex.CustomApiException;
 import shop.mtcoding.blog2.model.Board;
 import shop.mtcoding.blog2.model.BoardRepository;
+import shop.mtcoding.blog2.util.Parse;
 
 @Transactional(readOnly = true) // 여기 붙이면 모든 메서드에 다 붙음
 @Service
@@ -20,7 +21,8 @@ public class BoardService {
     @Transactional
     public void 글쓰기(BoardSaveReqDto boardSaveReqDto, int userId) {
 
-        int result = boardRepository.insert(boardSaveReqDto.getTitle(), boardSaveReqDto.getContent(),
+        String thumbnail = Parse.thumbnailPasing(boardSaveReqDto.getContent());
+        int result = boardRepository.insert(boardSaveReqDto.getTitle(), boardSaveReqDto.getContent(), thumbnail,
                 userId);
 
         if (result != 1) {
@@ -55,8 +57,9 @@ public class BoardService {
             throw new CustomApiException("해당 게시글을 삭제할 권한이 없습니다.", HttpStatus.FORBIDDEN);
         }
 
+        String thumbnail = Parse.thumbnailPasing(boardUpdateReqDto.getContent());
         try {
-            boardRepository.updateById(id, boardUpdateReqDto.getTitle(), boardUpdateReqDto.getContent());
+            boardRepository.updateById(id, boardUpdateReqDto.getTitle(), boardUpdateReqDto.getContent(), thumbnail);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new CustomApiException("게시글 수정에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);

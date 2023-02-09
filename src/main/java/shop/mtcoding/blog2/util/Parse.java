@@ -23,7 +23,6 @@ public class Parse {
             String img = el.attr("src");
             thumbnail = img;
         }
-
         return thumbnail;
     }
 }

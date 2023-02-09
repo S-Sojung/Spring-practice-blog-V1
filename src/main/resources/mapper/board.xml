@@ -11,7 +11,7 @@
     <select id="findById" resultType="shop.mtcoding.blog2.model.Board">
         select * from board_tb where id = #{id}
     </select>   
-    <select id="findAllWithUser" resultType="shop.mtcoding.blog.dto.board.BoardResp$BoardMainRespDto">
+    <select id="findAllWithUser" resultType="shop.mtcoding.blog2.dto.board.BoardResp$BoardMainRespDto">
         Select bt.id, bt.title, bt.thumbnail, ut.username
         from board_tb bt
         inner join user_tb ut
