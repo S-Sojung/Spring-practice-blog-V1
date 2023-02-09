@@ -12,10 +12,10 @@ public interface BoardRepository {
         public Board findById(int id);
 
         public int insert(@Param("title") String title, @Param("content") String content,
-                        @Param("thumbnail") String thumnail, @Param("userId") int userId);
+                        @Param("userId") int userId);
 
         public int updateById(@Param("id") int id, @Param("title") String title,
-                        @Param("content") String content, @Param("thumbnail") String thumnail);
+                        @Param("content") String content);
 
         public int deleteById(int id);
 }
