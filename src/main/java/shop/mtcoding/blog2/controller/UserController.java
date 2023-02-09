@@ -65,4 +65,10 @@ public class UserController {
     public String updateForm() {
         return "user/updateForm";
     }
+
+    @GetMapping("/logout")
+    public String logout() {
+        session.invalidate();
+        return "redirect:/";
+    }
 }
