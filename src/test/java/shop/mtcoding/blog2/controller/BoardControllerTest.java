@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import shop.mtcoding.blog2.dto.board.BaordReq.BoardSaveReqDto;
+import shop.mtcoding.blog2.dto.board.BaordReq.BoardUpdateReqDto;
 import shop.mtcoding.blog2.dto.board.BoardResp.BoardDetailRespDto;
 import shop.mtcoding.blog2.model.User;
 
@@ -121,5 +123,30 @@ public class BoardControllerTest {
         // then
         resultActions.andExpect(jsonPath("$.msg").value("삭제성공"));
         resultActions.andExpect(status().isOk());
+    }
+
+    @Test
+    public void update_test() throws Exception {
+        // given
+        int id = 1;
+        BoardUpdateReqDto boardUpdateReqDto = new BoardUpdateReqDto();
+        boardUpdateReqDto.setTitle("수정된제목");
+        boardUpdateReqDto.setContent("수정된내용");
+
+        String requestBody = om.writeValueAsString(boardUpdateReqDto);
+
+        // when
+        ResultActions resultActions = mvc.perform(
+                put("/board/" + id)
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .session(mockSession)); // session이 주입된 채로 요청
+
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.print("테스트: " + responseBody);
+
+        // then
+        resultActions.andExpect(jsonPath("$.msg").value("게시글 수정 성공"));
+        resultActions.andExpect(status().isCreated());
     }
 }
