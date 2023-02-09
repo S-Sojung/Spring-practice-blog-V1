@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import shop.mtcoding.blog2.dto.board.BaordReq.BoardSaveReqDto;
+import shop.mtcoding.blog2.dto.board.BaordReq.BoardUpdateReqDto;
 import shop.mtcoding.blog2.handler.ex.CustomApiException;
 import shop.mtcoding.blog2.model.Board;
 import shop.mtcoding.blog2.model.BoardRepository;
@@ -16,6 +17,7 @@ public class BoardService {
     @Autowired
     private BoardRepository boardRepository;
 
+    @Transactional
     public void 글쓰기(BoardSaveReqDto boardSaveReqDto, int userId) {
 
         int result = boardRepository.insert(boardSaveReqDto.getTitle(), boardSaveReqDto.getContent(),
@@ -26,6 +28,7 @@ public class BoardService {
         }
     }
 
+    @Transactional
     public void 게시글삭제(int id, int principalId) {
         Board board = boardRepository.findById(id);
         if (board == null) {
@@ -42,4 +45,21 @@ public class BoardService {
         }
     }
 
+    @Transactional
+    public void 게시글수정(int id, BoardUpdateReqDto boardUpdateReqDto, int principalId) {
+        Board boardPS = boardRepository.findById(id);
+        if (boardPS == null) {
+            throw new CustomApiException("해당 게시글을 찾을 수 없습니다."); // bad request
+        }
+        if (boardPS.getUserId() != principalId) {
+            throw new CustomApiException("해당 게시글을 삭제할 권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
+
+        try {
+            boardRepository.updateById(id, boardUpdateReqDto.getTitle(), boardUpdateReqDto.getContent());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new CustomApiException("게시글 수정에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
