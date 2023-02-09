@@ -19,10 +19,10 @@ public interface BoardRepository {
         public BoardDetailRespDto findByIdWithUser(int id);
 
         public int insert(@Param("title") String title, @Param("content") String content,
-                        @Param("userId") int userId);
+                        @Param("thumbnail") String thumnail, @Param("userId") int userId);
 
         public int updateById(@Param("id") int id, @Param("title") String title,
-                        @Param("content") String content);
+                        @Param("content") String content, @Param("thumbnail") String thumnail);
 
         public int deleteById(int id);
 }
